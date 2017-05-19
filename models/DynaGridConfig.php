@@ -70,7 +70,27 @@ class DynaGridConfig extends Model
      * @var string the currently selected grid theme
      */
     public $theme;
-
+    
+    /**
+     * @var string the saved field identifier
+     */
+    public $savedId = null;    
+    
+    /**
+     * @var array the all saved field 
+     */
+    public $savedList = [];    
+    /**
+     * @var sting saved field is wievable  as global 
+     */    
+    
+    public $savedIsGlobal = '';
+    /**
+     *
+     * @var string current saved name
+     */
+    
+    public $savedName = '';
     /**
      * @inheritdoc
      */
@@ -81,7 +101,7 @@ class DynaGridConfig extends Model
          */
         $module = Config::initModule(Module::classname());
         return [
-            [['id', 'hiddenColumns', 'visibleColumns', 'pageSize', 'filterId', 'sortId', 'theme'], 'safe'],
+            [['id', 'hiddenColumns', 'visibleColumns', 'pageSize', 'filterId', 'sortId', 'theme', 'savedId','savedName','savedIsGlobal',], 'safe'],
             [['pageSize', 'theme'], 'required'],
             ['pageSize', 'integer', 'min' => $module->minPageSize, 'max' => $module->maxPageSize],
             ['pageSize', 'default', 'value' => $module->defaultPageSize],

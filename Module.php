@@ -96,6 +96,17 @@ class Module extends \kartik\base\Module
      * on the dynagrid detail settings form
      */
     public $settingsConfigAction = '/dynagrid/settings/get-config';
+    
+    /**
+     *
+     * @var string  the action URL for load all saved config
+     */
+    public $settingsLoadConfigAction = '/dynagrid/settings/get-saved';
+    /**
+     *
+     * @var string  the action URL for remove saved grid config
+     */
+    public $settingsRemoveConfigAction = '/dynagrid/settings/delete-saved';
 
     /**
      * @var array the theme configuration for the gridview
@@ -151,7 +162,20 @@ class Module extends \kartik\base\Module
      * generated salt in the second case will be stored in a session variable identified by [[SALT_SESS_KEY]].
      */
     public $configEncryptSalt;
-
+    
+    /**
+     * @var mixed the action (url) used for creating a filter or sort setting
+     */
+    public $createAction = '/dynagrid/settings/create';
+    /**
+     * @var mixed the action (url) used for creating a filter or sort setting
+     */
+    public $updateAction = '/dynagrid/settings/update';
+    /**
+     * @var mixed the action (url) used for deleting a filter or sort setting
+     */
+    public $deleteAction = '/dynagrid/settings/delete';
+    
     /**
      * @inheritdoc
      */
