@@ -53,12 +53,7 @@
             self.$btnSubmit = $modal.find('.dynagrid-submit');
             self.$btnDelete = $modal.find('.dynagrid-delete');
             self.$btnReset = $modal.find('.dynagrid-reset');
-            self.$btnOpen = $form.find('.dynagrid-detail-open');            
-            self.$btnLoadGrid = $form.find('.dynagrid-detail-loadgrid');
-            self.$btnFastGrid = $form.find('.dynagrid-detail-fastgrid');
-            self.$btnSaveGrid = $form.find('.dynagrid-detail-savegrid');
-            self.$btnRemoveGrid = $form.find('.dynagrid-detail-removegrid');
-            self.$formContainer = $form.parent();            
+            self.$formContainer = $form.parent();
             self.setColumnKeys();
             self.visibleContent = self.$visibleEl.html();
             self.hiddenContent = self.$hiddenEl.html();
@@ -76,89 +71,6 @@
                     $form.submit();
                 }, 1000);
             });
-            self.$btnFastGrid.off('click').on('click', function () {
-                var url = window.location.href;
-                    if (url.indexOf('?') > -1){
-                        url += '&fastload='+$("#dynagridconfig-savedid").val();
-                    }else{
-                        url += '?fastload='+$("#dynagridconfig-savedid").val();
-                    }
-                window.location.href = url;
-            });
-            self.$btnLoadGrid.off('click').on('click', function () {
-                $.ajax({
-                    type: 'post',
-                    url: self.configLoadUrl,
-                    dataType: 'json',
-                    data: {_csrf: $('input[name=_csrf]').val(),
-                        DynaGridSettings: {
-                            savedId: $("#dynagridconfig-savedid").val(),
-                            name: $("#dynagridconfig-savedid :selected").text(),
-                            category: "saved",
-                            storage: $('[name="DynaGridSettings[storage]"]').val(),
-                            userSpecific: $('[name="DynaGridSettings[userSpecific]"]').val(),
-                            dynaGridId: $('[name="DynaGridSettings[dynaGridId]"]').val()
-                        }
-                    },
-                    success: function (data) {
-                        if (data.status === 'success' && $.isArray(data.content.keys)) {
-                            //hide all items
-                            $(self.$visibleEl).find('li[aria-grabbed=false]').each(function () {
-                                var litem = $(this).clone(true);
-                                litem.appendTo("#" + self.$hiddenEl.attr('id'));
-                                $(this).remove();
-                            });
-                            //show items from saved
-                            $.each(data.content.keys, function (value, key) {
-                                var litem = $('#' + key).clone(true);
-                                $('#' + key).remove();
-                                litem.appendTo("#" + self.$visibleEl.attr('id'));
-                            });
-                            self.$form.find('input[name="DynaGridConfig[pageSize]"]').val(data.content.page);
-                            self.$form.find('[name="DynaGridConfig[theme]"]').val(data.content.theme).change();
-                            self.$form.find('[name="DynaGridConfig[filterId]"]').val(data.content.filterId).change();
-                            self.$form.find('[name="DynaGridConfig[sortId]"]').val(data.content.sortId).change();
-                        }
-                    }
-                });
-            });
-            self.$btnSaveGrid.off('click').on('click', function () {
-               krajeeDialogCust.prompt({label:self.saveMessage, placeholder:self.saveMessage}, function (result) {
-                if (result) {
-                    self.setColumnKeys();
-                    self.$visibleKeys.val(self.visibleKeys);
-                    $form.hide();
-                    $formContainer.prepend(self.submitMessage);
-                    setTimeout(function () {
-                        $form.find('[name="DynaGridConfig[savedName]"]').val(result);
-                        $form.submit();
-                    }, 1000);
-                }
-            });
-            });
-            self.$btnRemoveGrid.off('click').on('click',function(){
-                if (!window.confirm(self.deleteConfirmation)) {
-                    return;
-                }                
-                $.ajax({
-                    type: 'post',
-                    url: self.configRemoveUrl,
-                    dataType: 'json',
-                    data: {_csrf: $('input[name=_csrf]').val(),
-                            savedId: $("#dynagridconfig-savedid").val(),
-                            category: "saved",
-                            storage: $('[name="DynaGridSettings[storage]"]').val(),                            
-                            dynaGridId: $('[name="DynaGridSettings[dynaGridId]"]').val()
-                    },
-                    success: function (data) {
-                        if (data.status === 'success' ) {                            
-                            $("#dynagridconfig-savedid").find("option[value='" + $("#dynagridconfig-savedid").val() + "']").remove();
-                        }
-                    }
-                });
-                
-            });
-    
             self.$btnDelete.off('click').on('click', function () {
                 if (!window.confirm(self.deleteConfirmation)) {
                     return;
@@ -250,9 +162,6 @@
         deleteMessage: '',
         deleteConfirmation: 'Are you sure you want to delete all your grid personalization settings?',
         modalId: '',
-        saveMessage: 'Please type grid name',
-        configLoadUrl: '',
-        dynaGridId: '',
-        configRemoveUrl: ''
+        dynaGridId: ''
     };
 }(window.jQuery));

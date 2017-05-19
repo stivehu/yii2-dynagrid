@@ -38,12 +38,6 @@ class DynaGridStore extends Object
      * Grid sort configuration storage
      */
     const STORE_SORT = 'sort';
-    
-    /**
-     * Saved grid sort configurations
-     */
-    
-    const STORE_SAVED = 'saved';
 
     /**
      * @var string the category of data to store
@@ -127,10 +121,6 @@ class DynaGridStore extends Object
         $this->setKey();
     }
 
-   public function setGlobalKey()
-   {
-        $this->_mstKey='global';
-   }
     /**
      * Sets the unique storage key
      *
@@ -267,7 +257,7 @@ class DynaGridStore extends Object
      */
     public function delete()
     {
-        $key = $this->_isMaster ? $this->_mstKey : $this->_dtlKey;        
+        $key = $this->_isMaster ? $this->_mstKey : $this->_dtlKey;
         switch ($this->storage) {
             case Dynagrid::TYPE_SESSION:
                 $config = Yii::$app->session->get($this->_mstKey, false);
@@ -307,7 +297,7 @@ class DynaGridStore extends Object
                 /**
                  * @var string $tableName
                  * @var string $idAttr
-                 */                
+                 */
                 $db->createCommand()->delete($tableName, [$idAttr => $key])->execute();
                 break;
             default:

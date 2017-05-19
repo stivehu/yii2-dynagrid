@@ -92,65 +92,6 @@ Modal::begin([
                         ])->hint(Yii::t('kvdynagrid', 'Set default grid sort criteria')) ?>
                     </div>
                 <?php endif; ?>
-                <div class="col-sm-<?= $col+3 ?>">
-
-                <?php echo \kartik\dialog\Dialog::widget([
-                        'libName' => 'krajeeDialogCust', // a custom lib name
-                        'options' => [
-                        'draggable' => false,
-                        'title' => Yii::t('kvdynagrid', 'Information'),
-                    'buttons' => 
-                            [
-                        [
-                            'label' => Yii::t('kvdynagrid', 'Cancel'),
-                            'icon' => \kartik\dialog\Dialog::ICON_CANCEL
-                        ],
-                        [
-                            'label' => Yii::t('kvdynagrid', 'Ok'),
-                            'icon' => \kartik\dialog\Dialog::ICON_OK,
-                            'class' => 'btn-primary'
-                        ],
-                        [
-                            'label' => Yii::t('kvdynagrid', 'Global'),
-                            'icon' => 'glyphicon glyphicon-globe',
-                            'class' => 'btn-primary',
-                            'action' => new \yii\web\JsExpression("function(dialog) {                            
-                                    if ($(this).css('color')=='rgb(51, 51, 51)'){
-                                    $(this).css('color','green');
-                                    $('[name=\"DynaGridConfig[savedIsGlobal]\"]').val('1');
-                                } else {
-                                    $(this).css('color','#333333');
-                                    $('[name=\"DynaGridConfig[savedIsGlobal]\"]').val('');
-                                }
-                            }")
-                        ],
-                    ]
-                                ]
-                ]);                                
-                    echo $form->field($model, 'savedId')->widget(Select2::classname(), [
-                        'data' => $model->savedList,
-                        'options' => ['placeholder' => Yii::t('kvdynagrid', 'Select a saved grid...'),
-                        ],
-                        'addon' => [
-                            'prepend' => [
-                                'content' => Html::button(
-                                    '<span class="glyphicon glyphicon-floppy-open "></span>', ['title' => Yii::t('kvdynagrid', 'Load'), 'class' => "dynagrid-detail-loadgrid btn-xs btn-primary"]).
-                                Html::button(
-                                    '<span class="glyphicon glyphicon-floppy-disk"></span>', ['title' => Yii::t('kvdynagrid', 'Fastload'), 'class' => "dynagrid-detail-fastgrid btn-xs btn-primary"]).
-                                Html::button(
-                                    '<span class="glyphicon glyphicon-floppy-save "></span>', ['title' => Yii::t('kvdynagrid', 'Save and apply'), 'class' => "dynagrid-detail-savegrid btn-xs btn-primary"]).
-                                Html::button(
-                                    '<span class="glyphicon glyphicon-floppy-remove "></span>', ['title' => Yii::t('kvdynagrid', 'Remove grid'), 'class' => "dynagrid-detail-removegrid btn-xs btn-danger"])
-                            ],
-                        ],
-                        'pluginOptions' => ['allowClear' => true,
-                        ]
-                     ])->hint(Yii::t('kvdynagrid', 'Load a saved grid'));
-                    echo $form->field($model, 'savedName')->hiddenInput()->label(false);
-                    echo $form->field($model, 'savedIsGlobal')->hiddenInput()->label(false);
-                    ?>
-
-                </div>                                                
                 <?= Html::hiddenInput('deleteFlag', 0) ?>
             </div>
         <?php endif; ?>

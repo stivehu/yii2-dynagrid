@@ -35,40 +35,11 @@ class SettingsController extends Controller
         if ($model->load($request->post()) && $model->validate()) {
             $validate = $model->validateSignature($request->post('configHashData', ''));
             if ($validate === true) {
-                $out = ['status' => 'success', 'link' => $model->getDataConfig(false), 'content' => print_r($model->getDataConfig(), true)];
+                $out = ['status' => 'success', 'content' => print_r($model->getDataConfig(), true)];
             } else {
                 $out = ['status' => 'error', 'content' => '<div class="alert alert-danger">' . $validate . '</div>'];
             }
         }
-        return $out;
-    }
-    
-    public function actionGetSaved()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = new DynaGridSettings();
-        $out = ['status' => '', 'content' => ''];
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $out = ['status' => 'success',
-                'content' => $model->getSavedConfig(),];
-        }
-        return $out;
-    }
-    
-    public function actionDeleteSaved(){
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = new DynaGridSettings();
-        $model->dynaGridId = \Yii::$app->request->post('dynaGridId');        
-        $model->storage = \Yii::$app->request->post('storage');
-        $model->settingsId=\Yii::$app->request->post('savedId');        
-        $out = ['status' => '', 'content' => ''];
-        try {
-            $model->deleteSettings();
-            $out = ['status' => 'success'];
-        } catch (Exception $ex) {
-            $out = ['status' => 'error'];
-        }           
-        
         return $out;
     }
 }

@@ -47,10 +47,6 @@ echo $form->field($model, 'name', [
         'append' => [
             'asButton' => true,
             'content' => Html::button(
-                '<span class="glyphicon glyphicon-open "></span>',
-                ['title' => Yii::t('kvdynagrid', 'Load'), 'class' => "dynagrid-detail-open btn btn-primary disabled"]
-            ) .
-            Html::button(                
                 '<span class="glyphicon glyphicon-ok"></span>',
                 ['title' => Yii::t('kvdynagrid', 'Save'), 'class' => "dynagrid-detail-save btn btn-primary"]
             ) .
@@ -76,5 +72,4 @@ echo Html::hiddenInput('deleteDetailFlag', 0);
 echo Html::hiddenInput('configHashData', $model->getHashSignature());
 echo Html::hiddenInput($requestSubmit, 1);
 echo Html::tag('span', '', ['id' => $model->key, 'class'=>'hide ' . $model->category . '-marker']);
-echo Html::hiddenInput('dynagridSettingLink', '');
 ActiveForm::end();

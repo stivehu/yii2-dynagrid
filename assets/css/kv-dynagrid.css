@@ -60,6 +60,3 @@
 .sortable-visible .icon-visible-column {
     display: inline-block;
 }
-.icon-visible-column *::before {
-    padding-right: 10px;
- }

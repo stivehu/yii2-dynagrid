@@ -66,7 +66,7 @@
                 setTimeout(function () {
                     $form.submit();
                 }, 1000);
-            });            
+            });
             self.$btnDelete.on('click', function () {
                 if (isEmpty(self.$list.val())) {
                     $form.trigger('reset.yiiActiveForm');
@@ -94,11 +94,7 @@
                         data: self.$form.serialize(),
                         success: function (data) {
                             if (data.status) {
-                                $form.find('.dynagrid-settings-text').html(data.content);                                
-                                if (data.link !== data.content) {
-                                    self.$btnOpen.removeClass('disabled');
-                                    $('input[name="dynagridSettingLink"]').val(data.link);
-                                }
+                                $form.find('.dynagrid-settings-text').html(data.content);
                             }
                         }
                     });
