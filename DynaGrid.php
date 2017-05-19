@@ -588,6 +588,14 @@ class DynaGrid extends Widget
     protected function applyGridConfig()
     {
         $config = $this->getGridConfig();
+        if (Yii::$app->request->get('fastload')) {
+            $fastModel = new DynaGridSettings([
+                'storage' => $this->storage,
+                'id' => Yii::$app->request->get('fastload'),
+                'dynaGridId' => 'global',
+            ]);
+            $config = $fastModel->getSavedConfig();
+        }        
         if ($this->_isSubmit) {
             $delete = ArrayHelper::getValue($_POST, 'deleteFlag', 0) == 1;
             $this->saveGridConfig($config, $delete);
@@ -628,6 +636,8 @@ class DynaGrid extends Widget
             'keys' => explode(',', $_POST['visibleKeys']),
             'filter' => $this->_model->filterId,
             'sort' => $this->_model->sortId,
+            'savedName' => $this->_model->savedName,
+            'savedIsGlobal' => $this->_model->savedIsGlobal,            
         ];
     }
 
@@ -643,6 +653,19 @@ class DynaGrid extends Widget
             $this->_store->delete();
         } else {
             $this->_store->save($config);
+            if (!empty($config['savedName'])) {
+                $model = new DynaGridSettings();
+                $model->category = DynaGridStore::STORE_SAVED;
+                $model->dynaGridId = $this->options['id'];
+                $model->storage = $this->storage;
+                $model->userSpecific = $this->userSpecific;
+                if (isset($config['savedIsGlobal']) && $config['savedIsGlobal'] == '1') {
+                    $model->dynaGridId = 'global';
+                    $model->userSpecific = FALSE;
+                }
+                $model->name = $config['savedName'];
+                $model->saveGrid($config);
+            }            
         }
     }
 
@@ -1044,6 +1067,10 @@ class DynaGrid extends Widget
                     $this->_model->sortList = $store->getDtlList(DynaGridStore::STORE_SORT);
                 }
             }
+            $this->_model->savedId = $this->_sortId;
+            $this->_model->savedList = $store->getDtlList(DynaGridStore::STORE_SAVED);
+            $store->setGlobalKey();
+            $this->_model->savedList['global'] = $store->getDtlList(DynaGridStore::STORE_SAVED);
             $dynagrid = $this->render(
                 $this->_module->configView, [
                 'model' => $this->_model,
@@ -1095,6 +1122,8 @@ class DynaGrid extends Widget
                     'deleteConfirmation' => $this->deleteConfirmation,
                     'isPjax' => $this->_isPjax,
                     'pjaxId' => $this->_pjaxId,
+                    'configLoadUrl' => \yii\helpers\Url::to([$this->_module->settingsLoadConfigAction]),
+                    'configRemoveUrl' => \yii\helpers\Url::to([$this->_module->settingsRemoveConfigAction]),
                 ]
             );
         }
@@ -1155,6 +1184,8 @@ class DynaGrid extends Widget
                 'deleteMessage' => Html::tag('div', $this->deleteMessage, $this->messageOptions),
                 'deleteConfirmation' => $this->deleteConfirmation,
                 'modalId' => $this->_gridModalId,
+                'configLoadUrl' => \yii\helpers\Url::to([$this->_module->settingsLoadConfigAction]),
+                'configRemoveUrl' => \yii\helpers\Url::to([$this->_module->settingsRemoveConfigAction]),
                 'dynaGridId' => $this->options['id'],
             ]
         );
