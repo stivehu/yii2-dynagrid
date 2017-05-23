@@ -33,7 +33,7 @@ class SettingsController extends Controller
         $out = ['status' => '', 'content' => ''];
         $request = Yii::$app->request;
         if ($model->load($request->post()) && $model->validate()) {
-            $validate = $model->validateSignature($request->post('configHashData', ''));
+            $validate = $model->validateSignature($request->post('configHashData', ''));            
             if ($validate === true) {
                 $out = ['status' => 'success', 'link' => $model->getDataConfig(false), 'content' => print_r($model->getDataConfig(), true)];
             } else {

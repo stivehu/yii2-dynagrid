@@ -76,6 +76,8 @@ class DynaGridSettings extends Model
      * @var Module the dynagrid module instance
      */
     protected $_module;
+    
+    public $savedId;
 
     /**
      * @inheritdoc
@@ -92,7 +94,7 @@ class DynaGridSettings extends Model
     public function rules()
     {
         return [
-            [['category', 'storage', 'userSpecific', 'dbUpdateNameOnly', 'name', 'dynaGridId', 'settingsId', 'saveId', 'key', 'data'], 'safe'],
+            [['category', 'storage', 'userSpecific', 'dbUpdateNameOnly', 'name', 'dynaGridId', 'settingsId', 'savedId', 'key', 'data'], 'safe'],
             [['name'], 'required'],
         ];
     }
@@ -124,7 +126,7 @@ class DynaGridSettings extends Model
      * @return DynaGridStore
      */
     public function getStore()
-    {
+    {        
         $settings = [
             'id' => $this->dynaGridId,
             'name' => $this->name,
@@ -133,9 +135,11 @@ class DynaGridSettings extends Model
             'userSpecific' => $this->userSpecific,
             'dbUpdateNameOnly' => $this->dbUpdateNameOnly
         ];
+        
         if (!empty($this->settingsId)) {
             $settings['dtlKey'] = $this->settingsId;
         }
+        $settings['dtlKey']= $this->savedId;
         return new DynaGridStore($settings);
     }
 
@@ -179,7 +183,7 @@ class DynaGridSettings extends Model
      * @return string
      */
     public function getSavedConfig()
-    {
+    {       
         return $this->store->fetch();
     }
     
@@ -232,7 +236,7 @@ class DynaGridSettings extends Model
                 } else {
                     preg_match("/r=(.*)/", preg_split("/\&/", Yii::$app->request->getReferrer())[0], $route); //todo: need a better solution
                 }
-
+                
                 return Yii::$app->urlManager->createUrl([urldecode($route[1]), ucwords(preg_split('/\//', urldecode($route[1]))[0]) => $data]);
             }            
             foreach ($data as $attribute => $value) {
