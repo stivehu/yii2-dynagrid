@@ -591,7 +591,7 @@ class DynaGrid extends Widget
         if (Yii::$app->request->get('fastload')) {
             $fastModel = new DynaGridSettings([
                 'storage' => $this->storage,
-                'id' => Yii::$app->request->get('fastload'),
+                'savedId' => Yii::$app->request->get('fastload'),
                 'dynaGridId' => 'global',
             ]);
             $config = $fastModel->getSavedConfig();
